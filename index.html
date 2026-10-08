@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SprintFlow - Scrum Sprint Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Clean Custom Title Bar -->
+  <header class="titlebar" id="titlebar">
+    <div class="titlebar-drag">
+      <div class="brand">
+        <span class="brand-title">SprintFlow</span>
+        <span class="sprint-pill" id="titlebar-sprint-pill">Sprint 1</span>
+      </div>
+    </div>
+    <div class="window-controls">
+      <button class="win-btn" id="btn-minimize" aria-label="Minimize">
+        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5h10v1H0z" fill="currentColor"/></svg>
+      </button>
+      <button class="win-btn" id="btn-maximize" aria-label="Maximize">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="1" width="8" height="8"/></svg>
+      </button>
+      <button class="win-btn win-close" id="btn-close" aria-label="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M1 1l8 8M9 1L1 9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Sprints Section -->
+      <div class="sidebar-section">
+        <div class="sidebar-header-row">
+          <span class="sidebar-heading">Sprints</span>
+          <button class="btn-icon-subtle" id="btn-create-sprint" title="Create New Sprint">+</button>
+        </div>
+        <div class="sprint-nav-list" id="sprint-nav-list">
+          <!-- Dynamic Sprints with Edit/Delete -->
+        </div>
+      </div>
+
+      <!-- Quick Status Filter -->
+      <div class="sidebar-section">
+        <div class="sidebar-header-row">
+          <span class="sidebar-heading">Development Statuses</span>
+          <button class="btn-icon-subtle" id="btn-manage-statuses" title="Add / Edit Development Statuses">⚙️</button>
+        </div>
+        <div class="status-filter-list" id="status-filter-list">
+          <!-- Dynamic Statuses rendered via renderer.js -->
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="standup-action-btn" id="btn-open-standup" title="Generate standup update text">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <span>Daily Standup</span>
+        </button>
+
+        <div class="footer-meta">
+          <button class="meta-btn" id="btn-theme-toggle" title="Toggle Light / Dark Mode">
+            <svg id="theme-icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+            </svg>
+            <svg id="theme-icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="theme-label-text">Theme</span>
+          </button>
+          <span>·</span>
+          <button class="meta-btn" id="btn-export">Export</button>
+          <span>/</span>
+          <button class="meta-btn" id="btn-import">Import</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-panel">
+      <!-- Sprint Header -->
+      <header class="sprint-header">
+        <div class="sprint-header-top">
+          <div class="sprint-title-wrap">
+            <h1 class="sprint-heading" id="current-sprint-title">Sprint 1</h1>
+            <span class="sprint-dates" id="current-sprint-dates">Oct 08 - Oct 15</span>
+            
+            <!-- Sprint Edit & Delete Actions in Header -->
+            <div class="sprint-header-actions" id="sprint-header-actions">
+              <button class="header-action-btn" id="btn-edit-current-sprint" title="Edit current sprint details">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>Edit Sprint</span>
+              </button>
+              <button class="header-action-btn btn-danger-action" id="btn-delete-current-sprint" title="Delete sprint">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="sprint-actions">
+            <!-- View toggles: Grouped Board vs List -->
+            <div class="view-toggle-group">
+              <button class="view-btn active" id="view-mode-grouped" title="Grouped by Status">Board</button>
+              <button class="view-btn" id="view-mode-list" title="Flat List">List</button>
+            </div>
+
+            <!-- Standup Copy Button -->
+            <button class="btn-standup-quick" id="btn-quick-standup" title="Copy formatted standup update to clipboard">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy Standup</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sprint Progress Bar & Metrics -->
+        <div class="sprint-progress-row">
+          <div class="progress-bar-track">
+            <div class="progress-bar-val" id="sprint-progress-fill" style="width: 0%"></div>
+          </div>
+          <div class="progress-metrics" id="sprint-progress-text">0 of 0 done (0%)</div>
+        </div>
+      </header>
+
+      <!-- Search and Filter Bar -->
+      <div class="toolbar-row">
+        <div class="search-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" placeholder="Filter tasks by name or status notes (Ctrl+F)..." autocomplete="off">
+          <button class="search-clear" id="search-clear" style="display: none;">&times;</button>
+        </div>
+
+        <div class="toolbar-stats" id="filter-status-tag" style="display: none;">
+          <span id="filter-status-label">Filter: In Progress</span>
+          <button id="filter-clear-btn" class="btn-clear-filter">&times;</button>
+        </div>
+      </div>
+
+      <!-- Quick Task Creator -->
+      <form id="task-creator-form" class="task-creator">
+        <div class="creator-main-row">
+          <input type="text" id="input-task-title" class="creator-title-input" placeholder="+ Add a task to this sprint, press Enter..." autofocus autocomplete="off" required>
+        </div>
+        <div class="creator-options-row">
+          <div class="option-selectors">
+            <!-- Initial Status (populated dynamically) -->
+            <select id="input-task-status" class="select-clean" title="Task status"></select>
+
+            <!-- Priority -->
+            <select id="input-task-priority" class="select-clean" title="Priority">
+              <option value="high">High Priority</option>
+              <option value="medium" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+
+            <!-- Status Note / Remark -->
+            <input type="text" id="input-task-note" class="input-note-clean" placeholder="Optional update note (e.g., API pending)...">
+          </div>
+
+          <button type="submit" class="btn-add-task">Add Task</button>
+        </div>
+      </form>
+
+      <!-- Task Content Views Container -->
+      <div class="tasks-container" id="tasks-container">
+        <!-- Board View (Grouped by status columns) -->
+        <div class="board-view" id="board-view"></div>
+
+        <!-- List View -->
+        <ul class="flat-list-view" id="flat-list-view" style="display: none;"></ul>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <span class="empty-state-text" id="empty-state-text">No tasks in this sprint.</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Daily Standup Generator Modal -->
+  <div class="modal-overlay" id="standup-modal" style="display: none;">
+    <div class="modal-dialog wide">
+      <div class="modal-header">
+        <span class="modal-title">Daily Sprint Standup Update</span>
+        <button class="modal-close" id="btn-close-standup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="standup-hint">Copy and paste this status summary directly into Slack, Teams, or your scrum notes:</p>
+        <textarea id="standup-text" class="standup-textarea" rows="12" readonly></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-subtle" id="btn-cancel-standup">Close</button>
+        <button type="button" class="btn-primary" id="btn-copy-standup-modal">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Sprint Modal -->
+  <div class="modal-overlay" id="create-sprint-modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <span class="modal-title">Create New Sprint</span>
+        <button class="modal-close" id="btn-close-create-sprint">&times;</button>
+      </div>
+      <form id="create-sprint-form" class="modal-body">
+        <div class="form-field">
+          <label for="sprint-name-input">Sprint Name</label>
+          <input type="text" id="sprint-name-input" class="modal-input" placeholder="e.g., Sprint 2" required>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="sprint-start-date">Start Date</label>
+            <input type="date" id="sprint-start-date" class="modal-input" required>
+          </div>
+          <div class="form-field">
+            <label for="sprint-end-date">End Date</label>
+            <input type="date" id="sprint-end-date" class="modal-input" required>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="sprint-goal-input">Sprint Goal (Optional)</label>
+          <input type="text" id="sprint-goal-input" class="modal-input" placeholder="e.g., Complete user onboarding flow">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-subtle" id="btn-cancel-create-sprint">Cancel</button>
+          <button type="submit" class="btn-primary">Create Sprint</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Sprint Modal -->
+  <div class="modal-overlay" id="edit-sprint-modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <span class="modal-title">Edit Sprint Details</span>
+        <button class="modal-close" id="btn-close-edit-sprint">&times;</button>
+      </div>
+      <form id="edit-sprint-form" class="modal-body">
+        <input type="hidden" id="edit-sprint-id">
+        <div class="form-field">
+          <label for="edit-sprint-name">Sprint Name</label>
+          <input type="text" id="edit-sprint-name" class="modal-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="edit-sprint-start">Start Date</label>
+            <input type="date" id="edit-sprint-start" class="modal-input">
+          </div>
+          <div class="form-field">
+            <label for="edit-sprint-end">End Date</label>
+            <input type="date" id="edit-sprint-end" class="modal-input">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="edit-sprint-goal">Sprint Goal (Optional)</label>
+          <input type="text" id="edit-sprint-goal" class="modal-input" placeholder="Sprint objective...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-subtle" id="btn-cancel-edit-sprint">Cancel</button>
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Manage Development Statuses Modal -->
+  <div class="modal-overlay" id="manage-statuses-modal" style="display: none;">
+    <div class="modal-dialog wide">
+      <div class="modal-header">
+        <span class="modal-title">Manage Development Statuses</span>
+        <button class="modal-close" id="btn-close-manage-statuses">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Add New Status Form -->
+        <form id="add-status-form" class="add-status-bar">
+          <input type="text" id="new-status-name" class="modal-input" placeholder="New status name (e.g., Staging UAT)..." required>
+          <input type="color" id="new-status-color" class="status-color-picker" value="#3b82f6" title="Pick status indicator color">
+          <button type="submit" class="btn-primary">Add Status</button>
+        </form>
+
+        <span class="modal-section-subtitle">Active Workflow Statuses (in board column order):</span>
+        <div class="custom-status-list" id="custom-status-list">
+          <!-- Status list items with inline edit/delete rendered by renderer.js -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-subtle" id="btn-reset-default-statuses">Reset to SDLC Defaults</button>
+        <button type="button" class="btn-primary" id="btn-done-manage-statuses">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Task Modal -->
+  <div class="modal-overlay" id="edit-task-modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <span class="modal-title">Edit Task & Update Status</span>
+        <button class="modal-close" id="btn-close-edit-task">&times;</button>
+      </div>
+      <form id="edit-task-form" class="modal-body">
+        <input type="hidden" id="edit-task-id">
+        <div class="form-field">
+          <label for="edit-task-title">Task Title</label>
+          <input type="text" id="edit-task-title" class="modal-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="edit-task-status">Status</label>
+            <select id="edit-task-status" class="modal-select"></select>
+          </div>
+          <div class="form-field">
+            <label for="edit-task-priority">Priority</label>
+            <select id="edit-task-priority" class="modal-select">
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="edit-task-sprint">Sprint</label>
+          <select id="edit-task-sprint" class="modal-select"></select>
+        </div>
+        <div class="form-field">
+          <label for="edit-task-note">Status Update Note / Blockers</label>
+          <input type="text" id="edit-task-note" class="modal-input" placeholder="e.g., API pending from backend team">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-subtle" id="btn-cancel-edit-task">Cancel</button>
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div class="toast-hub" id="toast-hub"></div>
+
+  <script type="module" src="src/renderer/app.js"></script>
+</body>
+</html>

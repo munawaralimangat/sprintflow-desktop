@@ -1,0 +1,28 @@
+{
+  "name": "sprintflow-desktop",
+  "version": "1.0.0",
+  "description": "Minimal, offline Scrum sprint & SDLC workflow desktop application built with Electron.js",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/munawaralimangat/sprintflow-desktop.git"
+  },
+  "keywords": [
+    "electron",
+    "scrum",
+    "sprint-tracker",
+    "sdlc",
+    "kanban",
+    "desktop-app",
+    "productivity"
+  ],
+  "author": "Munawar Ali Mangat",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.7.7"
+  }
+}

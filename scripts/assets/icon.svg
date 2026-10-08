@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e2230"/>
+      <stop offset="100%" stop-color="#0f1118"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bgGrad)" stroke="#2d3345" stroke-width="6"/>
+  <!-- Sprint Flow Path / S Shape -->
+  <path d="M72 88 C72 68, 88 56, 128 56 C168 56, 184 68, 184 88 C184 112, 140 120, 128 128 C116 136, 72 144, 72 168 C72 188, 88 200, 128 200 C168 200, 184 188, 184 168" 
+        fill="none" stroke="url(#accentGrad)" stroke-width="22" stroke-linecap="round"/>
+  <!-- Kanban / Sprint indicator dots -->
+  <circle cx="184" cy="88" r="10" fill="#38bdf8"/>
+  <circle cx="128" cy="128" r="9" fill="#818cf8"/>
+  <circle cx="72" cy="168" r="10" fill="#10b981"/>
+</svg>
