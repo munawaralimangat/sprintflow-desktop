@@ -106,13 +106,19 @@ function renderViews(state) {
 
   const filteredTasks = getFilteredTasks(state);
 
-  if (filteredTasks.length === 0) {
+  // If search query is active and yields no results, show search empty state
+  if (state.searchQuery && filteredTasks.length === 0) {
     if (emptyEl) emptyEl.style.display = 'flex';
-    if (emptyText) {
-      emptyText.textContent = state.searchQuery
-        ? `No tasks matching "${state.searchQuery}"`
-        : 'No tasks found for this status in current sprint.';
-    }
+    if (emptyText) emptyText.textContent = `No tasks matching "${state.searchQuery}"`;
+    if (boardEl) boardEl.style.display = 'none';
+    if (listEl) listEl.style.display = 'none';
+    return;
+  }
+
+  // If in list view and no tasks exist
+  if (state.viewMode !== 'grouped' && filteredTasks.length === 0) {
+    if (emptyEl) emptyEl.style.display = 'flex';
+    if (emptyText) emptyText.textContent = 'No tasks found in this sprint view.';
     if (boardEl) boardEl.style.display = 'none';
     if (listEl) listEl.style.display = 'none';
     return;
