@@ -188,32 +188,72 @@
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
+  padding-top: 14px;
 }
 
-.sidebar-action-btn {
+/* Sidebar Standup Button */
+.standup-action-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: transparent;
+  width: 100%;
+  background: var(--btn-standup-bg);
   border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-family: inherit;
-  font-size: 11.5px;
-  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
   border-radius: var(--radius-xs);
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.12s ease;
 }
 
-.sidebar-action-btn:hover {
-  background: var(--bg-column);
-  color: var(--text-primary);
+.standup-action-btn:hover {
+  background: var(--btn-standup-hover);
   border-color: var(--border-focus);
 }
 
-.theme-toggle-btn {
-  justify-content: space-between;
+.standup-action-btn svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* Footer Meta Controls (Theme Toggle, Export, Import) */
+.footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  font-size: 11.5px;
+  padding-top: 2px;
+}
+
+.meta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 6px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.meta-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-column);
+}
+
+.meta-btn svg {
+  color: var(--text-secondary);
 }
