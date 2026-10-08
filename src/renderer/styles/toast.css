@@ -1,0 +1,23 @@
+/* ==========================================================================
+   Toast Notification Hub
+   ========================================================================== */
+
+.toast-hub {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1000;
+}
+
+.toast-item {
+  background: #23242c;
+  border: 1px solid var(--border-focus);
+  color: var(--text-primary);
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}

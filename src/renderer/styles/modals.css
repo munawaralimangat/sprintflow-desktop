@@ -1,0 +1,318 @@
+/* ==========================================================================
+   Modals, Forms & Status Manager
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.modal-dialog {
+  background: var(--modal-dialog-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  width: 420px;
+  max-width: 90%;
+  padding: 18px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.modal-dialog.wide {
+  width: 540px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.modal-input,
+.modal-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  padding: 7px 9px;
+  font-family: inherit;
+  font-size: 12.5px;
+  outline: none;
+  user-select: text;
+}
+
+.modal-select option {
+  background: var(--select-option-bg);
+  color: var(--text-primary);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: var(--calendar-filter);
+  cursor: pointer;
+}
+
+.modal-input:focus,
+.modal-select:focus {
+  border-color: var(--border-focus);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.standup-hint {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.standup-textarea {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px;
+  font-family: 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  outline: none;
+  resize: none;
+  user-select: text;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-subtle {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: var(--radius-xs);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: var(--radius-xs);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.sprint-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.header-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.header-action-btn:hover {
+  background: var(--bg-column);
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
+.header-action-btn.btn-danger-action:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--status-blocked);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Manage Statuses Modal Components */
+.add-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  background: var(--bg-column);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.status-color-picker {
+  -webkit-appearance: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.status-color-picker::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.status-color-picker::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+
+.modal-section-subtitle {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin: 6px 0;
+}
+
+.custom-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.custom-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  gap: 10px;
+}
+
+.status-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.status-dot-preview {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-inline-input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 3px 6px;
+  flex: 1;
+  outline: none;
+  transition: all 0.12s ease;
+  user-select: text;
+}
+
+.status-inline-input:hover {
+  border-color: var(--border-subtle);
+  background: var(--bg-input);
+}
+
+.status-inline-input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-input);
+}
+
+.status-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.status-btn-icon:hover {
+  background: var(--bg-column);
+  color: var(--text-primary);
+}
+
+.status-btn-icon.del:hover {
+  color: var(--status-blocked);
+}

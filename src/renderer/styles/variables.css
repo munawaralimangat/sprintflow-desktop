@@ -1,0 +1,90 @@
+/* ==========================================================================
+   SprintFlow - Design Tokens & Themes
+   ========================================================================== */
+
+:root, [data-theme="dark"] {
+  --bg-app: #0f1013;
+  --bg-sidebar: #15161a;
+  --bg-column: #18191f;
+  --bg-card: #1d1e25;
+  --bg-card-hover: #23242c;
+  --bg-input: #17181e;
+  
+  --border-subtle: #272832;
+  --border-focus: #3e4050;
+  
+  --text-primary: #f0f1f5;
+  --text-secondary: #9ea0ac;
+  --text-tertiary: #656775;
+  --text-strike: #50525f;
+
+  /* SDLC Status Colors */
+  --status-todo: #71717a;
+  --status-in_design: #a855f7;
+  --status-in_dev: #3b82f6;
+  --status-code_review: #6366f1;
+  --status-qa_testing: #f59e0b;
+  --status-blocked: #ef4444;
+  --status-done: #10b981;
+
+  --priority-high: #ef4444;
+  --priority-med: #f59e0b;
+  --priority-low: #71717a;
+
+  --select-option-bg: #1e1f26;
+  --card-note-bg: rgba(0, 0, 0, 0.2);
+  --col-header-bg: rgba(0, 0, 0, 0.15);
+  --btn-add-bg: #2a2c38;
+  --btn-add-hover: #343746;
+  --btn-standup-bg: #252834;
+  --btn-standup-hover: #2f3342;
+  --modal-dialog-bg: #15161a;
+  --modal-backdrop: rgba(0, 0, 0, 0.65);
+  --calendar-filter: invert(0.8);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+}
+
+[data-theme="light"] {
+  --bg-app: #f6f7f9;
+  --bg-sidebar: #ebedf2;
+  --bg-column: #e4e7ec;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafafa;
+  --bg-input: #ffffff;
+  
+  --border-subtle: #d3d7de;
+  --border-focus: #9ba1ad;
+  
+  --text-primary: #121417;
+  --text-secondary: #4b5260;
+  --text-tertiary: #717886;
+  --text-strike: #9aa1ad;
+
+  /* SDLC Status Colors (Refined for Light background) */
+  --status-todo: #6b7280;
+  --status-in_design: #7c3aed;
+  --status-in_dev: #2563eb;
+  --status-code_review: #4f46e5;
+  --status-qa_testing: #d97706;
+  --status-blocked: #dc2626;
+  --status-done: #059669;
+
+  --priority-high: #dc2626;
+  --priority-med: #d97706;
+  --priority-low: #6b7280;
+
+  --select-option-bg: #ffffff;
+  --card-note-bg: #f3f4f6;
+  --col-header-bg: rgba(0, 0, 0, 0.04);
+  --btn-add-bg: #e2e6eb;
+  --btn-add-hover: #d5dae2;
+  --btn-standup-bg: #dfe4ec;
+  --btn-standup-hover: #d2d8e2;
+  --modal-dialog-bg: #ffffff;
+  --modal-backdrop: rgba(0, 0, 0, 0.35);
+  --calendar-filter: invert(0.2);
+}
