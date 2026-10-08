@@ -1293,10 +1293,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex-shrink: 0;
 }
 
-.status-row-name {
+.status-inline-input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  font-family: inherit;
   font-size: 12.5px;
   font-weight: 500;
-  color: var(--text-primary);
+  padding: 3px 6px;
+  flex: 1;
+  outline: none;
+  transition: all 0.12s ease;
+  user-select: text;
+}
+
+.status-inline-input:hover {
+  border-color: var(--border-subtle);
+  background: var(--bg-input);
+}
+
+.status-inline-input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-input);
 }
 
 .status-row-actions {

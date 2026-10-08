@@ -130,16 +130,10 @@ export function renderManageStatusesList() {
 
     row.innerHTML = `
       <div class="status-row-left">
-        <input type="color" class="status-color-picker" value="${st.color || '#71717a'}" title="Change color">
-        <span class="status-row-name">${escapeHtml(st.label)}</span>
+        <input type="color" class="status-color-picker" value="${st.color || '#71717a'}" title="Change status color">
+        <input type="text" class="status-inline-input" value="${escapeHtml(st.label)}" title="Click to edit status name" placeholder="Status name" maxlength="30" />
       </div>
       <div class="status-row-actions">
-        <button class="status-btn-icon btn-rename-status" title="Rename status">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-        </button>
         <button class="status-btn-icon del btn-del-status" title="Delete status">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
@@ -149,19 +143,38 @@ export function renderManageStatusesList() {
       </div>
     `;
 
-    row.querySelector('.status-color-picker').addEventListener('change', async (e) => {
+    const colorPicker = row.querySelector('.status-color-picker');
+    const nameInput = row.querySelector('.status-inline-input');
+    const delBtn = row.querySelector('.btn-del-status');
+
+    colorPicker.addEventListener('change', async (e) => {
       await store.updateStatus({ id: st.id, color: e.target.value });
+      showToast(`Updated color for ${st.label}`);
     });
 
-    row.querySelector('.btn-rename-status').addEventListener('click', async () => {
-      const newName = prompt('Rename status:', st.label);
-      if (newName && newName.trim()) {
-        await store.updateStatus({ id: st.id, label: newName.trim() });
-        renderManageStatusesList();
+    const saveName = async () => {
+      const newName = nameInput.value.trim();
+      if (newName && newName !== st.label) {
+        await store.updateStatus({ id: st.id, label: newName });
+        showToast(`Renamed to "${newName}"`);
+      } else if (!newName) {
+        nameInput.value = st.label;
+      }
+    };
+
+    nameInput.addEventListener('blur', saveName);
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        nameInput.blur();
+      }
+      if (e.key === 'Escape') {
+        nameInput.value = st.label;
+        nameInput.blur();
       }
     });
 
-    row.querySelector('.btn-del-status').addEventListener('click', async () => {
+    delBtn.addEventListener('click', async () => {
       if (state.statuses.length <= 1) {
         alert('At least one status is required in the workflow.');
         return;
@@ -169,7 +182,7 @@ export function renderManageStatusesList() {
       const count = state.tasks.filter(t => t.status === st.id).length;
       const msg = count > 0
         ? `Delete "${st.label}"? ${count} task(s) using it will be moved to another status.`
-        : `Delete "${st.label}"?`;
+        : `Delete status "${st.label}"?`;
 
       if (!confirm(msg)) return;
 
