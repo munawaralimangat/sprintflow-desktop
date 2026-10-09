@@ -110,6 +110,48 @@ class Store {
     await this.setState({ tasks });
   }
 
+  async moveTask(taskId, newStatusId, targetTaskId = null, insertAfter = false) {
+    const task = this.state.tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const currentSprintTasks = this.state.tasks.filter(t => t.sprintId === task.sprintId);
+    const otherSprintTasks = this.state.tasks.filter(t => t.sprintId !== task.sprintId);
+
+    // Remove moving task from current sprint
+    const filteredCurrent = currentSprintTasks.filter(t => t.id !== taskId);
+    const updatedTask = { ...task, status: newStatusId };
+
+    let newCurrentTasks = [];
+
+    if (!targetTaskId) {
+      if (insertAfter) {
+        newCurrentTasks = [...filteredCurrent, updatedTask];
+      } else {
+        // Put with other tasks of the same status if any exist
+        const sameStatusTasks = filteredCurrent.filter(t => t.status === newStatusId);
+        if (sameStatusTasks.length > 0) {
+          const lastIdx = filteredCurrent.lastIndexOf(sameStatusTasks[sameStatusTasks.length - 1]);
+          filteredCurrent.splice(lastIdx + 1, 0, updatedTask);
+          newCurrentTasks = filteredCurrent;
+        } else {
+          newCurrentTasks = [updatedTask, ...filteredCurrent];
+        }
+      }
+    } else {
+      const targetIdx = filteredCurrent.findIndex(t => t.id === targetTaskId);
+      if (targetIdx !== -1) {
+        const insertIdx = insertAfter ? targetIdx + 1 : targetIdx;
+        filteredCurrent.splice(insertIdx, 0, updatedTask);
+        newCurrentTasks = filteredCurrent;
+      } else {
+        newCurrentTasks = [updatedTask, ...filteredCurrent];
+      }
+    }
+
+    const allTasks = [...newCurrentTasks, ...otherSprintTasks];
+    await this.setState({ tasks: allTasks });
+  }
+
   // Sprints actions
   async addSprint(sprint) {
     const sprints = [...this.state.sprints, sprint];
@@ -145,6 +187,20 @@ class Store {
 
   async updateStatus(updatedStatus) {
     const statuses = this.state.statuses.map(s => (s.id === updatedStatus.id ? { ...s, ...updatedStatus } : s));
+    await this.setState({ statuses });
+  }
+
+  async reorderStatuses(statuses) {
+    await this.setState({ statuses });
+  }
+
+  async moveStatus(fromIndex, toIndex) {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= this.state.statuses.length || toIndex >= this.state.statuses.length) {
+      return;
+    }
+    const statuses = [...this.state.statuses];
+    const [moved] = statuses.splice(fromIndex, 1);
+    statuses.splice(toIndex, 0, moved);
     await this.setState({ statuses });
   }
 

@@ -127,7 +127,7 @@ function renderViews(state) {
   if (emptyEl) emptyEl.style.display = 'none';
 
   if (state.viewMode === 'grouped') {
-    if (boardEl) boardEl.style.display = 'grid';
+    if (boardEl) boardEl.style.display = 'flex';
     if (listEl) listEl.style.display = 'none';
     renderBoardView(filteredTasks, state);
   } else {

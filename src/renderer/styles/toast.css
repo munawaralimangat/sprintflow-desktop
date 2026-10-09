@@ -16,8 +16,9 @@
   background: #23242c;
   border: 1px solid var(--border-focus);
   color: var(--text-primary);
-  padding: 7px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }

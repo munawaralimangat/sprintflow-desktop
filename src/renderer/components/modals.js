@@ -124,16 +124,43 @@ export function renderManageStatusesList() {
   const state = store.getState();
   container.innerHTML = '';
 
-  state.statuses.forEach(st => {
+  let draggedStatusIndex = null;
+
+  state.statuses.forEach((st, idx) => {
+    const isFirst = idx === 0;
+    const isLast = idx === state.statuses.length - 1;
+
     const row = document.createElement('div');
     row.className = 'custom-status-row';
+    row.draggable = true;
+    row.dataset.statusIndex = String(idx);
 
     row.innerHTML = `
       <div class="status-row-left">
+        <span class="status-drag-handle" title="Drag to reorder status">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="8" cy="5" r="2"/>
+            <circle cx="16" cy="5" r="2"/>
+            <circle cx="8" cy="12" r="2"/>
+            <circle cx="16" cy="12" r="2"/>
+            <circle cx="8" cy="19" r="2"/>
+            <circle cx="16" cy="19" r="2"/>
+          </svg>
+        </span>
         <input type="color" class="status-color-picker" value="${st.color || '#71717a'}" title="Change status color">
         <input type="text" class="status-inline-input" value="${escapeHtml(st.label)}" title="Click to edit status name" placeholder="Status name" maxlength="30" />
       </div>
       <div class="status-row-actions">
+        <button class="status-btn-icon btn-move-up" title="Move Up" ${isFirst ? 'disabled' : ''}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+        <button class="status-btn-icon btn-move-down" title="Move Down" ${isLast ? 'disabled' : ''}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
         <button class="status-btn-icon del btn-del-status" title="Delete status">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
@@ -145,7 +172,86 @@ export function renderManageStatusesList() {
 
     const colorPicker = row.querySelector('.status-color-picker');
     const nameInput = row.querySelector('.status-inline-input');
+    const upBtn = row.querySelector('.btn-move-up');
+    const downBtn = row.querySelector('.btn-move-down');
     const delBtn = row.querySelector('.btn-del-status');
+
+    // Move Up
+    upBtn?.addEventListener('click', async () => {
+      if (idx > 0) {
+        await store.moveStatus(idx, idx - 1);
+        renderManageStatusesList();
+      }
+    });
+
+    // Move Down
+    downBtn?.addEventListener('click', async () => {
+      if (idx < state.statuses.length - 1) {
+        await store.moveStatus(idx, idx + 1);
+        renderManageStatusesList();
+      }
+    });
+
+    // Drag and Drop for Status Row in Modal
+    row.addEventListener('dragstart', (e) => {
+      if (e.target.closest('input, button')) {
+        e.preventDefault();
+        return;
+      }
+      draggedStatusIndex = idx;
+      row.classList.add('is-dragging-row');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    row.addEventListener('dragend', () => {
+      row.classList.remove('is-dragging-row');
+      container.querySelectorAll('.custom-status-row').forEach(r => r.classList.remove('drag-over-top', 'drag-over-bottom'));
+      draggedStatusIndex = null;
+    });
+
+    row.addEventListener('dragover', (e) => {
+      if (draggedStatusIndex === null || draggedStatusIndex === idx) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+
+      const rect = row.getBoundingClientRect();
+      const midpoint = rect.top + rect.height / 2;
+      row.classList.remove('drag-over-top', 'drag-over-bottom');
+      if (e.clientY < midpoint) {
+        row.classList.add('drag-over-top');
+      } else {
+        row.classList.add('drag-over-bottom');
+      }
+    });
+
+    row.addEventListener('dragleave', (e) => {
+      if (!row.contains(e.relatedTarget)) {
+        row.classList.remove('drag-over-top', 'drag-over-bottom');
+      }
+    });
+
+    row.addEventListener('drop', async (e) => {
+      if (draggedStatusIndex === null || draggedStatusIndex === idx) return;
+      e.preventDefault();
+
+      const rect = row.getBoundingClientRect();
+      const midpoint = rect.top + rect.height / 2;
+      const dropAbove = e.clientY < midpoint;
+
+      let targetIndex = idx;
+      if (!dropAbove && draggedStatusIndex < idx) {
+        targetIndex = idx;
+      } else if (dropAbove && draggedStatusIndex > idx) {
+        targetIndex = idx;
+      }
+
+      const fromIdx = draggedStatusIndex;
+      draggedStatusIndex = null;
+
+      await store.moveStatus(fromIdx, targetIndex);
+      renderManageStatusesList();
+      showToast('Status order updated');
+    });
 
     colorPicker.addEventListener('change', async (e) => {
       await store.updateStatus({ id: st.id, color: e.target.value });
